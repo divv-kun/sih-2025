@@ -1,39 +1,52 @@
 import React, { useState } from 'react';
 import { Shield, Users, MapPin, AlertTriangle, Globe, Settings } from 'lucide-react';
+import AuthWrapper from './components/AuthWrapper';
 import TouristApp from './components/TouristApp';
 import AdminDashboard from './components/AdminDashboard';
 import DigitalIDGenerator from './components/DigitalIDGenerator';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { SafetyProvider } from './contexts/SafetyContext';
+import { User } from '@supabase/supabase-js';
 
 function App() {
-  const [currentView, setCurrentView] = useState<'home' | 'tourist' | 'admin' | 'id-generator'>('home');
-
-  const renderCurrentView = () => {
-    switch (currentView) {
-      case 'tourist':
-        return <TouristApp onBack={() => setCurrentView('home')} />;
-      case 'admin':
-        return <AdminDashboard onBack={() => setCurrentView('home')} />;
-      case 'id-generator':
-        return <DigitalIDGenerator onBack={() => setCurrentView('home')} />;
-      default:
-        return <HomePage setCurrentView={setCurrentView} />;
-    }
-  };
-
   return (
     <LanguageProvider>
       <SafetyProvider>
         <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-purple-50">
-          {renderCurrentView()}
+          <AuthWrapper>
+            {(user: User, userType: 'tourist' | 'authority') => (
+              <MainApp user={user} userType={userType} />
+            )}
+          </AuthWrapper>
         </div>
       </SafetyProvider>
     </LanguageProvider>
   );
 }
 
-const HomePage: React.FC<{ setCurrentView: (view: string) => void }> = ({ setCurrentView }) => {
+const MainApp: React.FC<{ user: User; userType: 'tourist' | 'authority' }> = ({ user, userType }) => {
+  const [currentView, setCurrentView] = useState<'home' | 'tourist' | 'admin' | 'id-generator'>('home');
+
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'tourist':
+        return <TouristApp onBack={() => setCurrentView('home')} user={user} />;
+      case 'admin':
+        return <AdminDashboard onBack={() => setCurrentView('home')} user={user} />;
+      case 'id-generator':
+        return <DigitalIDGenerator onBack={() => setCurrentView('home')} user={user} />;
+      default:
+        return <HomePage setCurrentView={setCurrentView} userType={userType} />;
+    }
+  };
+
+  return renderCurrentView();
+};
+
+const HomePage: React.FC<{ 
+  setCurrentView: (view: string) => void; 
+  userType: 'tourist' | 'authority';
+}> = ({ setCurrentView, userType }) => {
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -47,6 +60,9 @@ const HomePage: React.FC<{ setCurrentView: (view: string) => void }> = ({ setCur
               </h1>
             </div>
             <div className="flex items-center space-x-4">
+              <div className="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
+                {userType === 'tourist' ? 'Tourist Account' : 'Authority Account'}
+              </div>
               <Globe className="h-5 w-5 text-teal-600" />
               <span className="text-sm text-gray-600">Multi-Language Support</span>
             </div>
@@ -68,37 +84,41 @@ const HomePage: React.FC<{ setCurrentView: (view: string) => void }> = ({ setCur
 
           {/* Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div 
-              onClick={() => setCurrentView('tourist')}
-              className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:scale-105"
-            >
-              <div className="bg-gradient-to-r from-teal-500 to-blue-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <MapPin className="h-8 w-8 text-white" />
+            {userType === 'tourist' && (
+              <div 
+                onClick={() => setCurrentView('tourist')}
+                className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:scale-105"
+              >
+                <div className="bg-gradient-to-r from-teal-500 to-blue-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <MapPin className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Tourist Mobile App</h3>
+                <p className="text-gray-600 mb-6">
+                  Real-time safety monitoring, geo-fencing alerts, panic button, and personalized safety scoring.
+                </p>
+                <div className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-6 py-2 rounded-full font-semibold">
+                  Launch App →
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Tourist Mobile App</h3>
-              <p className="text-gray-600 mb-6">
-                Real-time safety monitoring, geo-fencing alerts, panic button, and personalized safety scoring.
-              </p>
-              <div className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-6 py-2 rounded-full font-semibold">
-                Launch App →
-              </div>
-            </div>
+            )}
 
-            <div 
-              onClick={() => setCurrentView('admin')}
-              className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:scale-105"
-            >
-              <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Users className="h-8 w-8 text-white" />
+            {userType === 'authority' && (
+              <div 
+                onClick={() => setCurrentView('admin')}
+                className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:scale-105"
+              >
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Users className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Authority Dashboard</h3>
+                <p className="text-gray-600 mb-6">
+                  Real-time monitoring, heat maps, incident management, and automated alert systems for authorities.
+                </p>
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full font-semibold">
+                  Access Dashboard →
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Authority Dashboard</h3>
-              <p className="text-gray-600 mb-6">
-                Real-time monitoring, heat maps, incident management, and automated alert systems for authorities.
-              </p>
-              <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full font-semibold">
-                Access Dashboard →
-              </div>
-            </div>
+            )}
 
             <div 
               onClick={() => setCurrentView('id-generator')}
