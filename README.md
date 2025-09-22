@@ -13,7 +13,7 @@ Core Components
 - Blockchain-Based ID: Tamper-proof digital identity for secure verification.  
 - AI/ML Models: Anomaly detection, predictive risk scoring.  
 - Integrated Dashboards: Real-time GIS visualizations, alert management, automated e-FIR generation.  
-- IoT Wearables (Optional): Smart bands/tags for remote or high-risk areas with SOS and health/location tracking. 
+- Block Chain - Hyperledger Fabric  
 
 Features
 - Panic button with live location sharing to emergency services.  
@@ -24,12 +24,12 @@ Features
 - Privacy-focused design with end-to-end encryption.  
 
 System Workflow
-1. Tourist Registration & ID Verification (Blockchain Digital Identity).  
+1. Tourist Registration & ID Verification using hybrid system that directly connect directly to Government Database and have Blockchain based  Security.  
 2. Movement Tracking begins via app/IoT devices.  
 3. AI Risk Assessment monitors for anomalies or unsafe behavior.  
-4. Geo-Fence Breach or Panic Button** triggers emergency alerts.  
-5. Integrated Dashboard** notifies authorities with real-time data.  
-6. Emergency Response Activation** with automated protocols.  
+4. Geo-Fence Breach or Panic Button triggers emergency alerts.  
+5. Integrated Dashboard notifies authorities with real-time data.  
+6. Emergency Response Activation with automated protocols.  
 
 Practical Applications
 - Geo-fencing: Restricted zones, attraction safety, high-crime alerts.  
