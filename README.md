@@ -32,8 +32,7 @@ System Workflow
 6. Emergency Response Activation with automated protocols.  
 
 Practical Applications
-- Geo-fencing: Restricted zones, attraction safety, high-crime alerts.  
-- IoT Solutions: Trekking bands, RFID for caves, forest sensors, remote beacons.  
+- Geo-fencing: Restricted zones, attraction safety, high-crime alerts.    
 - Disaster Management: Landslide prediction, flood alerts, earthquake protocols.  
 - Security Solutions: Safe route recommendations, emergency comms in conflict areas.  
 
