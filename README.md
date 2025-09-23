@@ -51,6 +51,6 @@ Future Scope
 
 Contact
 For queries or contributions, please reach out:  
-Team Name - The under dogs : https://www.linkedin.com/in/debyansh-kar-970314270/
+Team Name - Aegis : https://www.linkedin.com/in/debyansh-kar-970314270/
 
 
